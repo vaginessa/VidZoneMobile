@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<widget xmlns = "http://www.w3.org/ns/widgets"
+    xmlns:gap = "http://phonegap.com/ns/1.0"
+    id        = "com.vidzone.tv"
+    version   = "1.0.0">
+
+<name>VidZone</name>
+
+<description>
+VidZone Music Video service
+</description>
+
+<author href="https://example.com" email="thomas.hughes@vidzone.tv">
+Thomas Hughes
+</author>
+
+</widget>

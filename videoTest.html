@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="./styles.css"/>
+<style type="text/css">
+#mainContainer {
+  position: relative;
+  width: 640px;
+  height: 480px;
+}
+
+#content, #adContainer {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 640px;
+  height: 480px;
+}
+</style>
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <script type="text/javascript" src="http://www.google.com/uds?file=ima&v=1&nodependencyload=true"></script>
+<script type="text/javascript">
+	// DOM is loaded
+	$(document).ready(function(){
+              
+        var adsManager;
+        var clickTrackingOverlay = document.getElementById('clickTrackingOverlay');
+        var videoElement = document.getElementById('videohtml5');   
+        var adsLoader = new google.ima.AdsLoader();
+
+          // Add event listeners
+        adsLoader.addEventListener(
+            google.ima.AdsLoadedEvent.Type.ADS_LOADED,
+            onAdsLoaded,
+            false);
+        adsLoader.addEventListener(
+            google.ima.AdErrorEvent.Type.AD_ERROR,
+            onAdError,
+            false);
+
+           // Create request object
+           var adsRequest = {
+              adTagUrl: "http://req.tidaltv.com/tpas1.aspx?mt=1&pid=2332&xf=7&ap=0&rand=1368196321810&amtype=mp4",
+              adType: "video"
+            };
+
+          // Make request
+          adsLoader.requestAds(adsRequest);
+
+          function onAdsLoaded(adsLoadedEvent) {
+            // Get the ads manager
+            adsManager = adsLoadedEvent.getAdsManager();
+            adsManager.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, onAdError);
+
+            // Listen and respond to events which require you to pause/resume content
+            adsManager.addEventListener(
+                google.ima.AdEvent.Type.CONTENT_PAUSE_REQUESTED,
+                onPauseRequested);
+            adsManager.addEventListener(
+                google.ima.AdEvent.Type.CONTENT_RESUME_REQUESTED,
+                onResumeRequested);
+			adsManager.addEventListener(
+                google.ima.AdEvent.Type.COMPLETE,
+                onAdsComplete);	
+
+            // Set a visual element on which clicks should be tracked for video ads
+            adsManager.setClickTrackingElement(clickTrackingOverlay);
+            try {
+              // Call play to start showing the ad.
+              adsManager.play(videoElement);
+	
+			  //videoElement.setAttribute("controls","controls");
+            } catch (adError) {
+              // An error may be thrown if there was a problem with the VAST response.
+            }
+          }
+		  
+		  function onAdsComplete() {
+			  // on ad completion play a video
+			  videoElement.src = "http://sceeassets.vidzone.tv/testvideo/mobile/63944.mp4"
+			  videoElement.load();
+			  videoElement.play();
+			  videoElement.setAttribute("controls","controls");
+			  //Set the now Playing
+			  document.getElementById('currentlyPlayingText').innerHTML = 'Lonely Planet - Jack Sparrow'
+			  $('currentlyPlayingText')
+		  }
+
+          function onAdError(adErrorEvent) {
+            // Handle the error logging.
+            console.log(adErrorEvent.getError());
+          }
+
+          function onPauseRequested() {
+            videoElement.pause();
+            // Setup UI for showing ads (e.g. display ad timer countdown,
+            // disable seeking, etc.)
+            // setupUIForAd();
+          }
+
+          function onResumeRequested() {
+            // Setup UI back for showing content.
+            // setupUIForContent();
+            videoElement.play();
+          }  
+        });
+        </script>
+<title>Home</title>
+</head>
+<body style="padding:0;margin:0;">
+<a href="index.html">
+<div class="header"><img src="assets/images/VidZone.gif" width="202" height="57" alt="VidZoneLogo"/></div>
+</a>
+<div class="main">
+	<video id="videohtml5" width="100%">
+        <source src="#" type="video/mp4">
+              Your browser does not support HTML5 Video.
+    </video> 
+    <div class="currentlyPlaying">
+    	<p class="label darkBackgroundText"><span>Now Playing :</span></p>
+        <p class="label darkBackgroundText"><span id="currentlyPlayingText">Advertisement</span></p>
+    </div> 
+  </div>
+</div>
+
+</body>
+</html>
